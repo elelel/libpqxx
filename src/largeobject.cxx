@@ -17,6 +17,7 @@
 extern "C"
 {
 #include <libpq-fe.h>
+#include <libpq/libpq-fs.h>
 }
 
 #include "pqxx/largeobject"
@@ -29,7 +30,7 @@ namespace
 constexpr inline int std_mode_to_pq_mode(std::ios::openmode mode)
 {
   /// Mode bits, copied from libpq-fs.h so that we no longer need that header.
-  constexpr int INV_WRITE{0x00020000}, INV_READ{0x00040000};
+  // constexpr int INV_WRITE{0x00020000}, INV_READ{0x00040000};
 
   return ((mode & std::ios::in) ? INV_READ : 0) |
          ((mode & std::ios::out) ? INV_WRITE : 0);

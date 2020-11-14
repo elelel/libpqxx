@@ -14,6 +14,9 @@
 #ifndef PQXX_H_TRANSACTION_BASE
 #define PQXX_H_TRANSACTION_BASE
 
+#include <libpq-fe.h>
+#include <libpq/libpq-fs.h>
+
 #include "pqxx/compiler-public.hxx"
 #include "pqxx/internal/compiler-internal-pre.hxx"
 
@@ -34,6 +37,7 @@
 #include "pqxx/result.hxx"
 #include "pqxx/row.hxx"
 #include "pqxx/stream_from.hxx"
+#include "pqxx/lo_decl.hxx"
 
 namespace pqxx::internal::gate
 {
@@ -442,6 +446,27 @@ public:
   }
 
   //@}
+
+  /**
+   * @name Large object manipulation
+   */
+  //@{
+  oid lo_create(oid o = 0) {
+    auto c = conn().raw_connection();
+    auto actual_oid = ::lo_create(c, o);
+    if (actual_oid != 0) {
+      return oid{actual_oid};
+    } else throw std::runtime_error("Failed to create large object oid");
+  }
+  
+  template <single_byted T>
+  lo<T> lo_open(oid o, int mode = INV_READ) {
+    auto c = conn().raw_connection();
+    auto fd = ::lo_open(c, o, mode);
+    return lo<T>(*this, o, fd);
+  }
+  //@}
+
 
   /**
    * @name Error/warning output

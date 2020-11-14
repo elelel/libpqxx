@@ -1,0 +1,2 @@
+#include "pqxx/lo_decl.hxx"
+#include "pqxx/lo_impl.hxx"

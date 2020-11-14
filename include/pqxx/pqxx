@@ -6,6 +6,7 @@
 #include "pqxx/errorhandler"
 #include "pqxx/except"
 #include "pqxx/largeobject"
+#include "pqxx/lo"
 #include "pqxx/nontransaction"
 #include "pqxx/notification"
 #include "pqxx/pipeline"

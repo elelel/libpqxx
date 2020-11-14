@@ -96,6 +96,8 @@ namespace pqxx::internal::gate
 class connection_dbtransaction;
 class connection_errorhandler;
 class connection_largeobject;
+class connection_lo;
+class connection_transaction_base;
 class connection_notification_receiver;
 class connection_pipeline;
 class connection_sql_cursor;
@@ -103,6 +105,7 @@ class connection_stream_from;
 class connection_stream_to;
 class connection_transaction;
 class const_connection_largeobject;
+class const_connection_lo;
 } // namespace pqxx::internal::gate
 
 
@@ -738,6 +741,7 @@ private:
   std::size_t esc_to_buf(std::string_view text, char *buf) const;
 
   friend class internal::gate::const_connection_largeobject;
+  friend class internal::gate::const_connection_lo;
   char const *PQXX_PURE err_msg() const noexcept;
 
   void PQXX_PRIVATE process_notice_raw(char const msg[]) noexcept;
@@ -768,6 +772,8 @@ private:
   void PQXX_PRIVATE end_copy_write();
 
   friend class internal::gate::connection_largeobject;
+  friend class internal::gate::connection_lo;
+  friend class PQXX_LIBEXPORT PQXX_NOVTABLE transaction_base;
   internal::pq::PGconn *raw_connection() const { return m_conn; }
 
   friend class internal::gate::connection_notification_receiver;
